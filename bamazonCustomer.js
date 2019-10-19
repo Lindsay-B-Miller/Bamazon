@@ -20,32 +20,61 @@ connection.connect(function (err) {
     console.log("connected as id " + connection.threadId + "\n");
     displayItems();
     inquirerFunction()
-});
 
-function displayItems() {
-    console.log("Selecting all products...\n");
-    connection.query("SELECT * FROM products", function (err, res) {
-        if (err) throw err;
-        // Log all results of the SELECT statement
-        console.table(res);
-        connection.end();
-    });
-}
 
-function inquirerFunction() {
-    inquirer.prompt([
-        {
-            type: "input",
-            name: "id",
-            message: "What product would you like to buy? (Please select an item id) \n",
-            validate: function (value) {
-                if (isNaN(value) === false) {
-                    return true;
+    function displayItems() {
+        console.log("Selecting all products...\n");
+        connection.query("SELECT * FROM products", function (err, res) {
+            if (err) throw err;
+            // Log all results of the SELECT statement
+            console.table(res);
+
+        });
+    }
+
+    function inquirerFunction() {
+        inquirer.prompt([
+            {
+                type: "input",
+                name: "id",
+                message: "What product would you like to buy? (Please select an item id) \n",
+                validate: function (value) {
+                    if (isNaN(value) === false) {
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
+            },
+            {
+                type: "input",
+                name: "units",
+                message: "How many units would you like to purchase? \n",
+                validate: function (value) {
+                    if (isNaN(value) === false) {
+                        return true;
+                    }
+                    return false;
+                }
             }
-        }
-    ]).then(function (userItem) {
-        console.log("Selecting item " + userItem.id)
-    })
-}
+        ]).then(function (userItem) {
+            console.log("Selecting item " + userItem.id);
+            console.log("Number of uits: " + userItem.units);
+            var query = connection.query(
+                "SELECT * FROM products WHERE ?",
+                {
+                    item_id: userItem.id
+                },
+                function (err, res) {
+                    if (err) throw err;
+                    console.log(res);
+                    // if (userItem.units <= 
+                }
+            );
+            console.log(query.sql);
+            connection.end();
+
+        });
+
+    }
+    // connection.end();
+});
