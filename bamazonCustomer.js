@@ -68,7 +68,8 @@ connection.connect(function (err) {
                                     "UPDATE products SET ? WHERE ?",
                                     [
                                         {
-                                            stock_quantity: (res[0].stock_quantity - userItem.units)
+                                            stock_quantity: (res[0].stock_quantity - userItem.units),
+                                            product_sales: (userItem.units * res[0].price)
                                         },
                                         {
                                             item_id: userItem.id
