@@ -102,8 +102,8 @@ connection.connect(function (err) {
                     }
                 ]).then(function (addUser) {
                     // var stockQuantity;
-                    console.log(addUser.addInventory);
-                    console.log(addUser.addNumUnits);
+                    // console.log(addUser.addInventory);
+                    // console.log(addUser.addNumUnits);
                     connection.query("SELECT stock_quantity FROM products WHERE item_id = ?", [addUser.addInventory], function (err, res) {
                         var stockQuantity = (res[0].stock_quantity);
 
@@ -120,8 +120,8 @@ connection.connect(function (err) {
                             ],
                             function (err, res) {
                                 if (err) throw err;
-                                console.log(res),
-                                    connection.end();
+                                // console.log(res),
+                                connection.end();
                             }
                         )
                     })
