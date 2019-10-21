@@ -15,6 +15,8 @@ var connection = mysql.createConnection({
     database: "bamazon"
 });
 
+
+
 connection.connect(function (err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId + "\n");
@@ -66,7 +68,9 @@ connection.connect(function (err) {
         )
     };
 
+
     function addToInventory() {
+
         var query = connection.query(
             "SELECT * FROM products",
             function (err, res) {
@@ -97,23 +101,30 @@ connection.connect(function (err) {
                         }
                     }
                 ]).then(function (addUser) {
+                    // var stockQuantity;
                     console.log(addUser.addInventory);
                     console.log(addUser.addNumUnits);
-                    var query = connection.query(
-                        "UPDATE products SET ? WHERE ?",
-                        [
-                            {
-                                stock_quantity: (parseInt(addUser.addNumUnits) + parseInt(res[(addUser.addInventory - 1)].stock_quantity))
-                            },
-                            {
-                                item_id: addUser.addInventory
+                    connection.query("SELECT stock_quantity FROM products WHERE item_id = ?", [addUser.addInventory], function (err, res) {
+                        var stockQuantity = (res[0].stock_quantity);
+
+                        var query = connection.query(
+                            "UPDATE products SET ? WHERE ?",
+                            [
+                                {
+                                    // Change way of grabbing id
+                                    stock_quantity: (parseInt(addUser.addNumUnits) + parseInt(stockQuantity))
+                                },
+                                {
+                                    item_id: addUser.addInventory
+                                }
+                            ],
+                            function (err, res) {
+                                if (err) throw err;
+                                console.log(res),
+                                    connection.end();
                             }
-                        ],
-                        function (err, res) {
-                            if (err) throw err;
-                            connection.end();
-                        }
-                    )
+                        )
+                    })
                 })
                 // connection.end();
             }
