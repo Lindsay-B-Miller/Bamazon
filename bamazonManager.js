@@ -120,62 +120,130 @@ connection.connect(function (err) {
         )
     };
 
-    function addProduct() {
-        inquirer.prompt([
-            {
-                type: "input",
-                name: "productName",
-                message: "What product would you like to add?"
-            },
-            {
-                type: "input",
-                name: "departmentName",
-                message: "What department houses this item?"
-            },
-            {
-                type: "input",
-                name: "price",
-                message: "What is the price of this item?",
-                validate: function (value) {
-                    if (isNaN(value) === false) {
-                        return true;
-                    }
-                    return false;
-                }
-            },
-            {
-                type: "input",
-                name: "quantity",
-                message: "How many of these items would you like to stock?",
-                validate: function (value) {
-                    if (isNaN(value) === false) {
-                        return true;
-                    }
-                    return false;
-                }
-            }
-        ]).then(function (userNewItem) {
-            // console.log(userNewItem.productName)
-            // console.log(userNewItem.departmentName)
-            // console.log(userNewItem.price)
-            // console.log(userNewItem.quantity)
-            console.log("Inserting new item... \n")
-            var query = connection.query(
-                "INSERT INTO products SET?",
-                {
-                    product_name: userNewItem.productName,
-                    department_name: userNewItem.departmentName,
-                    price: userNewItem.price,
-                    stock_quantity: userNewItem.quantity
-                },
-                function (err, res) {
-                    if (err) throw err;
-                    console.log(res.affectedRows + " item inserted!\n")
-                }
 
-            );
-            connection.end();
-        });
+
+    function addProduct() {
+        var array = [];
+        var newDept = "";
+
+        // Trying to make the choices appear as the department names      
+        var query = connection.query(
+            "SELECT department_name FROM departments",
+            function (err, res) {
+                if (err) throw err;
+
+                // Trying to make the choices appear as the department names
+                for (i = 0; i < res.length; i++) {
+                    array.push(res[i].department_name)
+                };
+                array.push("Create New Department")
+                inquirer.prompt([
+                    {
+                        type: "input",
+                        name: "productName",
+                        message: "What product would you like to add?"
+                    },
+                    {
+                        type: "list",
+                        name: "departmentName",
+                        message: "What department houses this item?",
+                        choices: array
+                    },
+                    {
+                        type: "input",
+                        name: "price",
+                        message: "What is the price of this item?",
+                        validate: function (value) {
+                            if (isNaN(value) === false) {
+                                return true;
+                            }
+                            return false;
+                        }
+                    },
+                    {
+                        type: "input",
+                        name: "quantity",
+                        message: "How many of these items would you like to stock?",
+                        validate: function (value) {
+                            if (isNaN(value) === false) {
+                                return true;
+                            }
+                            return false;
+                        }
+                    }
+                ]).then(function (userNewItem) {
+                    // console.log(userNewItem.productName)
+                    // console.log(userNewItem.departmentName)
+                    // console.log(userNewItem.price)
+                    // console.log(userNewItem.quantity)
+                    console.log("Inserting new item... \n")
+
+                    if (userNewItem.departmentName === "Create New Department") {
+                        inquirer.prompt([
+                            {
+                                type: "input",
+                                name: "newDepartment",
+                                message: "Please enter the name of the department in which your new item is housed"
+                            },
+                            {
+                                type: "input",
+                                name: "overHead",
+                                message: "What is the overhead cost of this department?"
+                            }
+                        ]).then(function (userNewDepartment) {
+                            newDept = userNewDepartment.newDepartment
+                            var query = connection.query(
+                                "INSERT INTO products SET?",
+                                {
+                                    product_name: userNewItem.productName,
+                                    department_name: newDept,
+                                    price: userNewItem.price,
+                                    stock_quantity: userNewItem.quantity
+                                },
+
+                                // Displaying item inserted
+                                function (err, res) {
+                                    if (err) throw err;
+                                    console.log(res.affectedRows + " item inserted into products\n")
+                                },
+                            );
+                            var query = connection.query(
+                                "INSERT INTO departments SET?",
+                                {
+                                    department_name: newDept,
+                                    over_head_costs: userNewDepartment.overHead
+                                },
+                                // Displaying item inserted
+                                function (err, res) {
+                                    if (err) throw err;
+                                    console.log(res.affectedRows + " item inserted into departments\n")
+                                },
+                                connection.end()
+                            );
+                        })
+                    }
+
+                    else {
+                        var query = connection.query(
+                            "INSERT INTO products SET?",
+                            {
+                                product_name: userNewItem.productName,
+                                department_name: userNewItem.departmentName,
+                                price: userNewItem.price,
+                                stock_quantity: userNewItem.quantity
+                            },
+
+                            // Displaying item inserted
+                            function (err, res) {
+                                if (err) throw err;
+                                console.log(res.affectedRows + " item inserted!\n")
+                            },
+                        );
+                        connection.end();
+                    }
+                });
+            }
+        )
     }
 
 

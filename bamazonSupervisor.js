@@ -20,17 +20,33 @@ connection.connect(function (err) {
     console.log("connected as id " + connection.threadId + "\n");
     inquirerFunction();
 
-})
 
-function inquirerFunction() {
-    inquirer.prompt([
-        {
-            type: "list",
-            name: "supervisorOptions",
-            message: "Please choose from the options below:",
-            choices: ["View Product Sales by Department", "Create New Department"]
-        }
-    ]).then(function (userList) {
-        console.log(userList.supervisorOptions)
-    })
-}
+
+    function inquirerFunction() {
+        inquirer.prompt([
+            {
+                type: "list",
+                name: "supervisorOptions",
+                message: "Please choose from the options below:",
+                choices: ["View Product Sales by Department", "Create New Department"]
+            }
+        ]).then(function (userList) {
+            console.log(userList.supervisorOptions)
+
+            if (userList.supervisorOptions === "View Product Sales by Department") {
+                viewSales();
+            }
+        })
+    };
+
+    function viewSales() {
+        var query = connection.query(
+            "SELECT * FROM departments",
+            function (err, res) {
+                if (err) throw err;
+                console.table(res);
+            }
+        )
+    }
+
+});
