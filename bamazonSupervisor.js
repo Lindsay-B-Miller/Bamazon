@@ -43,7 +43,7 @@ connection.connect(function (err) {
 
     function viewSales() {
         var query = connection.query(
-            "SELECT d.department_id, d.department_name, d.over_head_costs, SUM(p.product_sales) AS 'product sales' FROM departments d INNER JOIN products p ON d.department_name = p.department_name GROUP BY d.department_id",
+            "SELECT d.department_id, d.department_name, d.over_head_costs, SUM(p.product_sales) AS 'product sales', SUM(p.product_sales)-d.over_head_costs AS 'total profit' FROM departments d INNER JOIN products p ON d.department_name = p.department_name GROUP BY d.department_id",
 
             function (err, res) {
                 if (err) throw err;
