@@ -36,20 +36,54 @@ connection.connect(function (err) {
             if (userList.supervisorOptions === "View Product Sales by Department") {
                 viewSales();
             }
-
+            else if (userList.supervisorOptions === "Create New Department") {
+                createDepartment();
+            }
 
         })
     };
 
     function viewSales() {
         var query = connection.query(
-            "SELECT d.department_id, d.department_name, d.over_head_costs, SUM(p.product_sales) AS 'product sales', SUM(p.product_sales)-d.over_head_costs AS 'total profit' FROM departments d INNER JOIN products p ON d.department_name = p.department_name GROUP BY d.department_id",
-
+            "SELECT d.department_id, d.department_name, d.over_head_costs, SUM(p.product_sales) AS 'product sales', SUM(p.product_sales)-d.over_head_costs AS 'total profit' FROM departments d LEFT JOIN products p ON d.department_name = p.department_name GROUP BY d.department_id",
             function (err, res) {
                 if (err) throw err;
                 console.table(res);
+            },
+        );
+        connection.end()
+    }
+
+    function createDepartment() {
+        inquirer.prompt([
+            {
+                type: "input",
+                name: "deptName",
+                message: "What department would you like to create?"
+            },
+            {
+                type: "input",
+                name: "overHead",
+                message: "What is the overhead cost of this department?"
             }
-        )
+        ]).then(function (userDept) {
+            console.log(userDept.deptName);
+            console.log(userDept.overHead);
+
+            var query = connection.query(
+                "INSERT INTO departments SET ?",
+                {
+                    department_name: userDept.deptName,
+                    over_head_costs: userDept.overHead
+                },
+                // Displaying item inserted
+                function (err, res) {
+                    if (err) throw err;
+                    console.log(res.affectedRows + " new department inserted\n")
+                },
+            )
+            connection.end();
+        })
     }
 
 });
