@@ -36,12 +36,15 @@ connection.connect(function (err) {
             if (userList.supervisorOptions === "View Product Sales by Department") {
                 viewSales();
             }
+
+
         })
     };
 
     function viewSales() {
         var query = connection.query(
-            "SELECT * FROM departments",
+            "SELECT d.department_id, d.department_name, d.over_head_costs, SUM(p.product_sales) AS 'product sales' FROM departments d INNER JOIN products p ON d.department_name = p.department_name GROUP BY d.department_id",
+
             function (err, res) {
                 if (err) throw err;
                 console.table(res);
