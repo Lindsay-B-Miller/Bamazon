@@ -231,8 +231,8 @@ connection.connect(function (err) {
                                     if (err) throw err;
                                     console.log(res.affectedRows + " item inserted into departments\n")
                                 },
-                                connection.end()
                             );
+                            connection.end()
                         })
                     }
 
