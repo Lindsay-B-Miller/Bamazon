@@ -1,5 +1,7 @@
 var mysql = require("mysql");
-var inquirer = require("inquirer")
+var inquirer = require("inquirer");
+require("dotenv").config();
+var keys = require("./keys.js");
 
 var connection = mysql.createConnection({
     host: "127.0.0.1",
@@ -8,11 +10,11 @@ var connection = mysql.createConnection({
     port: 3306,
 
     // Your username
-    user: "root",
+    user: keys.credentials.user,
 
     // Your password
-    password: "bootcamp",
-    database: "bamazon"
+    password: keys.credentials.password,
+    database: keys.credentials.database
 });
 
 connection.connect(function (err) {
