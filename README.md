@@ -82,3 +82,24 @@ Clone the reepo at `https://github.com/Lindsay-B-Miller/Bamazon`
 - - Once the user enters the information, the new item and item information is entered into the `products` table, and the new department and department information is entered into the `departments` table. 
 ![Manager Create New Dept](./images/CreateNewDept.jpg?raw=true)
 ![New Department Created](./images/NewDeptCreated.jpg?raw=true)
+
+3. `bamazonSupervisor.js`
+* Inside the terminal, type `node bamazonSupervisor.js`.
+* The app uses inquirer to prompt the user to select from a list of two options: `View Product Sales by Department`, and `Create New Department`.
+![Supervisor Choices](./images/SupervisorChoices.jpg?raw=true)
+* `View Product Sales by Department`:
+- - If the user selects `View Product Sales by Department`, the app loggs a table of the `department_id`, `department_name`, `over_head_costs`, `product_sales`, and `total_profit`. `product sales` is the sum of all sales for items in the department (previously calculated by multiplying the number of items purchased by the cost of the item). `total profit` is calculated by subtracting the `over_head_costs` from the `product sales`. 
+![Supervisor View](./images/SupervisorView.jpg?raw=true)
+* `Create New Department`:
+- - If the user selects `Create New Department`, the app first prompts the user to enter the name of the department that they wish to create.
+![Supervisor New Department](./images/SupervisorNewDept.jpg?raw=true)
+- - The app then asks the user to enter the over head cost of the department. Once the user has entered the information, the app creates a new row in the `departments` table with the new information. This new department will also be accessible in the `bamazonManager.js` file when adding a new product.
+![Supervisor Final](./images/SupervisorFinal.jpg?raw=true)
+
+## Contact
+Lindsay B Miller created this project with instructions from Trilogy Education Services.
+
+Project Link: https://github.com/Lindsay-B-Miller/liri-node-app
+
+Deployed Link: https://lindsay-b-miller.github.io/liri-node-app/
+
