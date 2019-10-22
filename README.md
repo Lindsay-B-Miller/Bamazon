@@ -45,7 +45,7 @@ Please install the following packages:
 Clone the reepo at `https://github.com/Lindsay-B-Miller/Bamazon`
 
 ## Usage 
-1. `bamazonCustomer.js`
+### 1. `bamazonCustomer.js`
 * Inside the terminal, type `node bamazonCustomer.js`.
 * The app logs all of the products in the `products` table in SQL, including the item_id, product_name, department_name, and the price of the items. At the bottom of the table, the app asks ` What product would you like to buy? (Please select an item id)`
 ![Customer Log](./images/CustomerLog.jpg?raw=true)
@@ -54,7 +54,8 @@ Clone the reepo at `https://github.com/Lindsay-B-Miller/Bamazon`
 * If the user requests a greater number of the item than the `stock_quantity`, the app will log `Insufficient quantity! Please reduce the number of units in your order or select a different item.` and run the application again so that the user can view their purchase options and try a new purchase. 
 ![Insufficient Quantity](./images/InsufficientQuantity.jpg?raw=true)
 
-2. `bamazonManager.js`
+
+### 2. `bamazonManager.js`
 * Inside the terminal, type `node bamazonManager.js`.
 * The app uses inquirer to prompt the user to select from a list of four options: `View Products for Sale`, `View Low Inventory`, `Add to Inventory`, and `Add New Product`.
 ![Manager Prompts](./images/ManagerPrompts.jpg?raw=true)
@@ -83,7 +84,7 @@ Clone the reepo at `https://github.com/Lindsay-B-Miller/Bamazon`
 ![Manager Create New Dept](./images/CreateNewDept.jpg?raw=true)
 ![New Department Created](./images/NewDeptCreated.jpg?raw=true)
 
-3. `bamazonSupervisor.js`
+### 3. `bamazonSupervisor.js`
 * Inside the terminal, type `node bamazonSupervisor.js`.
 * The app uses inquirer to prompt the user to select from a list of two options: `View Product Sales by Department`, and `Create New Department`.
 ![Supervisor Choices](./images/SupervisorChoices.jpg?raw=true)
