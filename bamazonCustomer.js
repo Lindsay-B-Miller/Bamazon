@@ -1,5 +1,7 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer")
+require("dotenv").config();
+var keys = require("./keys.js");
 
 var connection = mysql.createConnection({
     host: "127.0.0.1",
@@ -8,11 +10,11 @@ var connection = mysql.createConnection({
     port: 3306,
 
     // Your username
-    user: "root",
+    user: keys.credentials.user,
 
     // Your password
-    password: "bootcamp",
-    database: "bamazon"
+    password: process.env.SQL_PASSWORD,
+    database: keys.credentials.database
 });
 
 connection.connect(function (err) {
@@ -22,7 +24,7 @@ connection.connect(function (err) {
 
     function displayItems() {
         console.log("Selecting all products...\n");
-        connection.query("SELECT * FROM products", function (err, res) {
+        connection.query("SELECT item_id, product_name, department_name, price FROM products", function (err, res) {
             if (err) throw err;
             // Log all results of the SELECT statement
             console.table(res);
